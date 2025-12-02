@@ -6,10 +6,12 @@ def parenthesis_matching(string) -> bool:
     bracket_pairs = {')': '(', ']': '[', '}': '{'}
     stack = []
     for char in string:
+        # 左括号入栈
         if char in bracket_pairs.values():
             stack.append(char)
+        # 右括号配对检测
         elif char in bracket_pairs.keys():
-            if len(stack)>0 and stack[-1] == bracket_pairs[char]:  # 配对成功
+            if len(stack) > 0 and stack[-1] == bracket_pairs[char]:  # 配对成功
                 stack.pop()
             else:
                 return False

@@ -25,7 +25,7 @@ class LinkedList:
         self.length = 0
 
     def append(self, data):
-        # 在链表尾插入元素
+        # 在链表尾插入元素  O(N)
         cur_node = self.head
         while cur_node.next is not None:
             cur_node = cur_node.next
@@ -33,7 +33,7 @@ class LinkedList:
         self.length += 1
 
     def get(self, index):
-        # index=0代表头节点
+        # index=0代表头节点 O(N)
         if index <= 0 or index > self.length:
             return None
 

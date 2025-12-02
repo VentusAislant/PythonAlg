@@ -1,17 +1,20 @@
 class Solution:
     def isPalindrome(self, s: str) -> bool:
-        char_lst = []
-        for char in s:
-            if char.isalnum():
-                char_lst.append(char.lower())
+        """
+        双向指针判断
+        """
+        i, j = 0, len(s) - 1
+        while i < j:
+            while not s[i].isalnum() and i < j:
+                i += 1
 
-        left, right = 0, len(char_lst)-1
-        while left < right:
-            if char_lst[left] == char_lst[right]:
-                left += 1
-                right -= 1
-            else:
+            while not s[j].isalnum() and j > i:
+                j -= 1
+
+            if s[i].lower() != s[j].lower():
                 return False
+            i+=1
+            j-=1
         return True
 
 if __name__ == '__main__':

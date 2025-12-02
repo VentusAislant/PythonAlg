@@ -22,7 +22,7 @@ print(ch_lst) # ['h', 'e', ..., 'R', 'o', 's', 'e']
 判断字符串类型
 """
 # 判断字符串类型
-# isdigit()  是否全是数字
+# isdigit() 是否全是数字
 # isalpha() 是否全是字母(不包含空格和标点符号)
 # isalnum() 是否全是数字或者字母
 # isspace()	是否全是空白字符（空格、换行）
@@ -40,8 +40,7 @@ for s in examples:
 '123': isdigit=True, isalpha=False, isalnum=True, isspace=False
 'abc123': isdigit=False, isalpha=False, isalnum=True, isspace=False
 'abc!': isdigit=False, isalpha=False, isalnum=False, isspace=False
-'
-': isdigit=False, isalpha=False, isalnum=False, isspace=True
+'\n': isdigit=False, isalpha=False, isalnum=False, isspace=True
 'abc DEF': isdigit=False, isalpha=False, isalnum=False, isspace=False
 'こんにちは': isdigit=False, isalpha=True, isalnum=True, isspace=False
 """

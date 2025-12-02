@@ -1,13 +1,18 @@
-from typing import List
-
 class Solution:
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
+    def threeSum(self, nums: list[int]) -> list[list[int]]:
+        """
+        先排序，先选定一个数字，可以是下标 i=[0, n-2)
+            然后剩下的两个数从 nums[i:]找，此时可以利用找两个数的和的算法来找
+            使用双指针，当和较小左指针右移动，当和较大右指针左移
+        """
+        n = len(nums)
         nums.sort()
         res = []
-        for i in range(0, len(nums)-2):
+        for i in range(0, n-2):
             if i > 0 and nums[i] == nums[i-1]:
-                # 和前面重复了，直接到下一个不重复的即可
+                # 和前面先选的数相同，直接跳过即可
                 continue
+
             l, r = i + 1, len(nums) - 1
             while l < r:
                 s = nums[i] + nums[l] + nums[r]
@@ -22,9 +27,11 @@ class Solution:
                         l += 1
                     while l < r and nums[r] == nums[r-1]:
                         r -= 1
+
                     l += 1
                     r -= 1
         return res
+
 
 if __name__ == '__main__':
     cases = [

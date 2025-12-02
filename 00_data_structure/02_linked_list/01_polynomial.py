@@ -32,6 +32,8 @@ class Polynomial:
             raise ValueError("coefficients and exponents must have same length")
         if len(coefficients) == 0:
             return
+
+        # 先将指数和系数构建成二元组，然后根据二元组中的指数进行排序
         data = [(coefficients[i], exponents[i]) for i in range(len(coefficients))]
         data.sort(key=lambda x: x[1])
 
@@ -41,7 +43,7 @@ class Polynomial:
             cur_node = cur_node._next
 
     def __add__(self, other):
-        # 多项式相加: 将自己的head之后断开，遍历两个链表进行插入，加到自己链表中
+        # 多项式相加: 将自己的 head 之后断开，遍历两个链表进行插入，加到自己链表中
         p, q = self.head._next, other.head._next
         result = Polynomial()
         cur_node = result.head

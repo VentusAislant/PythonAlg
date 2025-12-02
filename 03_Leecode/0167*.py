@@ -1,7 +1,12 @@
-from typing import List
-
 class Solution:
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+    def twoSum(self, numbers: list[int], target: int) -> list[int]:
+        """
+        双指针：左指针指向最小值，右指针指向最大值
+            如果当前和小于目标值，说明需要增大，则左指针右移
+            如果当前和大于目标值，说明需要减小，则右指针左移
+
+        如果把序列中任意两数的和组成有序序列，这种算法类似从中间开始往两侧找
+        """
         l, r = 0, len(numbers) - 1
         while l < r:
             curr_sum = numbers[l] + numbers[r]

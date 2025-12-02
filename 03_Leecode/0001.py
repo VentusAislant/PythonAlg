@@ -20,5 +20,5 @@ if __name__ == '__main__':
     ]
     solution = Solution()
     for case in cases:
-        res = solution.twoSum(case[0], case[1])
-        print(res, case[2])
+        res = solution.twoSum(*case[:-1])
+        print(res, case[-1])

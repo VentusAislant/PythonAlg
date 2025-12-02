@@ -19,6 +19,7 @@ print(str_val[6:])  # world
 str_val = "hello world"
 lowest_idx = str_val.find("world")
 print(lowest_idx)  # 6
+print(str_val[lowest_idx:lowest_idx+len("world")])
 lowest_idx = str_val.find("xxx")  # 找不到会返回 -1
 print(lowest_idx)  # -1
 

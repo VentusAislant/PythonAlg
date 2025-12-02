@@ -13,6 +13,7 @@ class Solution:
         res = 0
         i = 0
         while i < len(s):
+            # 对于 I X C 存在六种特殊情况
             if i < len(s) - 1 and (s[i] == 'I' or s[i] == 'X' or s[i] == 'C'):
                 if 1 <= roman_dict[s[i+1]][1] - roman_dict[s[i]][1] <= 2:
                     res += roman_dict[s[i+1]][0] - roman_dict[s[i]][0]

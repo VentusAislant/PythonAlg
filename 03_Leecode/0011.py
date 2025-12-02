@@ -2,6 +2,9 @@ from typing import List
 
 class Solution:
     def maxArea(self, height: List[int]) -> int:
+        """
+        从两端向中间遍历, 每次只把高度比较低的指针进行移动，来确保下一个可能获得更多区域
+        """
         i, j = 0, len(height) - 1
         max_area = 0
         while i < j:
