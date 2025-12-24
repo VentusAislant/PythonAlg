@@ -1,4 +1,29 @@
 class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        """
+        动态规划
+        因为可以在任意时刻买卖，但是同时只能持有一只股票，因此只有两个状态
+            buy： 手里持有股票时的最大利润
+            sell: 手里没有股票时的最大利润
+        状态转移：
+            对于今天价格 price
+            buy = max(
+                buy,  # 昨天已经持股，今天不动
+                sell - price  # 今天买入
+            )
+
+            sell = max(
+                sell, # 昨天已经卖出，今天不动
+                buy + price  # 今天卖出
+            )
+
+        """
+        b = -prices[0]
+        s = 0
+        for price in prices[1:]:
+            b = max(b, s - price)
+            s = max(s, b + price)
+        return s
 
     def is_minimum(self, prices: list[int], index) -> bool:
         if index == 0:
@@ -16,7 +41,7 @@ class Solution:
         else:
             return prices[index] >= prices[index + 1] and prices[index] >= prices[index - 1]
 
-    def maxProfit(self, prices: list[int]) -> int:
+    def maxProfitV1(self, prices: list[int]) -> int:
         """
         以极小值点买入，在下一个极大值点卖出
         时间复杂度 O(N)

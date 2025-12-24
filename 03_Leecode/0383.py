@@ -1,15 +1,25 @@
-from collections import Counter
+from collections import defaultdict
 
 
 class Solution:
-    def canConstruct(self, ransomNote: str, magazine: str) -> bool:
-        ransomNote_count = Counter(ransomNote)
-        magazine_count = Counter(magazine)
-        for k, v in ransomNote_count.items():
-            if k not in magazine_count:
+    def canConstruct(self, randomNote: str, magazine: str) -> bool:
+        """
+        使用两个哈希表，一个存储 randomNote 的字符频率，一个存储 magazine 的字符频率
+            然后对比字符频率，确保 randomNote 的每个字符频率都小于等于 magazine 的
+        """
+        randomNote_counter = defaultdict(int)
+        magazine_counter = defaultdict(int)
+        for char in randomNote:
+            randomNote_counter[char] += 1
+
+        for char in magazine:
+            magazine_counter[char] += 1
+
+        for char, required_num in randomNote_counter.items():
+            if char not in magazine_counter:
                 return False
             else:
-                if ransomNote_count[k] > magazine_count[k]:
+                if required_num > magazine_counter[char]:
                     return False
         return True
 

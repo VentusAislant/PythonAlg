@@ -1,5 +1,4 @@
 from collections import deque
-from typing import Optional, List
 
 
 class TreeNode:
@@ -10,23 +9,31 @@ class TreeNode:
 
 
 class Solution:
-    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+    def hasPathSum(self, root: TreeNode | None, targetSum: int) -> bool:
+        """
+        使用前序遍历，遍历过程中判断是否满足 targetSum， 注意必须到叶子结点的路径
+        """
         if root is None:
             return False
-        return self.dfs(root, 0, targetSum)
 
-    def dfs(self, node, cur_sum, target_sum):
-        cur_sum += node.val
-        if node.left is None and node.right is None:
-            return cur_sum == target_sum
+        def preorder(node, cur_sum=0) -> bool:
+            cur_sum += node.val
 
-        left_res = False
-        right_res = False
-        if node.left:
-            left_res = self.dfs(node.left, cur_sum, target_sum)
-        if node.right:
-            right_res = self.dfs(node.right, cur_sum, target_sum)
-        return left_res or right_res
+            if node.left is None and node.right is None:
+                # 叶子结点
+                return cur_sum == targetSum
+
+            left_flag = False
+            right_flag = False
+            if node.left:
+                left_flag = preorder(node.left, cur_sum)
+
+            if node.right:
+                right_flag = preorder(node.right, cur_sum)
+
+            return left_flag or right_flag
+
+        return preorder(root)
 
 
 def construct_tree(level_order):
@@ -50,7 +57,7 @@ def construct_tree(level_order):
     return root
 
 
-def level_order(root: Optional[TreeNode]) -> List[int]:
+def level_order(root: TreeNode | None) -> list[int]:
     queue = deque()
     queue.append(root)
     result = []
@@ -69,6 +76,7 @@ if __name__ == '__main__':
         (([5, 4, 8, 11, None, 13, 4, 7, 2, None, None, None, 1], 22), True),
         (([1, 2, 3], 5), False),
         (([], 0), False),
+        (([1, 2], 1), False),
     ]
     solution = Solution()
     for input, answer in cases:

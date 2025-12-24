@@ -1,11 +1,13 @@
-from typing import List
-
-
 class Solution:
-    def searchInsert(self, nums: List[int], target: int) -> int:
+    def searchInsert(self, nums: list[int], target: int) -> int:
+        """
+        核心是边界问题，二分查找始终在维持一个正确的区间定义，因为python中都是 左闭右开的，所以初始化
+            left = 0  right = len(nums) 代表 [left, right)
+            左右子区间分别是 [left, mid), [mid+1, right)
+        """
         left, right = 0, len(nums)
         while left < right:
-            mid = (left + right) // 2
+            mid = (left + right) >> 1
             if target <= nums[mid]:
                 right = mid
             else:

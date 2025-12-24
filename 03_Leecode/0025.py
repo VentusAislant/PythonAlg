@@ -1,7 +1,3 @@
-from typing import *
-
-
-# Definition for singly-linked list.
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
@@ -9,38 +5,73 @@ class ListNode:
 
 
 class Solution:
-    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        pass
+    def reverseKGroup(self, head: ListNode | None, k: int) -> ListNode | None:
+        if k == 1:
+            return head
 
+        cur = head
+        length = 0
+        while cur:
+            length += 1
+            cur = cur.next
 
-def construct_linked_list(nums: List[int]) -> Optional[ListNode]:
-    if len(nums) == 0:
-        return None
-    head = ListNode(nums[0])
-    cur = head
-    for num in nums[1:]:
-        cur.next = ListNode(num)
-        cur = cur.next
-    return head
+        num_groups = length // k
+        left = 1
+        right = k
+        for _ in range(num_groups):
+            head = self.reverseBetween(head, left, right)
+            left += k
+            right += k
+        return head
 
+    def reverseBetween(self, head: ListNode | None, left: int, right: int) -> ListNode | None:
+        """
+        改进：回想链表的头插法，可以反转链表，可以参考头插法思路，找到 left 前一个结点 prev
+            记 left 位置处的结点为 cur, 不断将 cur 后面的结点插入到 prev 后面，最后即可完成逆置
+        """
+        dummy_head = ListNode(0, head)
 
-def get_nums(head: ListNode) -> List[int]:
-    nums = []
-    cur = head
-    while cur:
-        nums.append(cur.val)
-        cur = cur.next
-    return nums
+        # 1. 找到 pre 结点
+        prev = dummy_head
+        for _ in range(left - 1):
+            prev = prev.next
+
+        # 不断头插 cur 后面的结点，注意不能断链
+        cur = prev.next
+        for _ in range(right - left):
+            next_node = cur.next  # 将 cur 后面的结点插入到 prev 后
+            cur.next = next_node.next
+            next_node.next = prev.next
+            prev.next = next_node
+
+        return dummy_head.next
+
+    def construct_linked_list(self, lst: list[int]) -> ListNode | None:
+        if len(lst) == 0: return None
+        head = ListNode(lst[0])
+        cur_node = head
+        for val in lst[1:]:
+            cur_node.next = ListNode(val)
+            cur_node = cur_node.next
+        return head
+
+    def get_linked_list(self, head):
+        cur_node = head
+        res = []
+        while cur_node:
+            res.append(cur_node.val)
+            cur_node = cur_node.next
+        return res
 
 
 if __name__ == '__main__':
-    solution = Solution()
     cases = [
         ([1, 2, 3, 4, 5], 2, [2, 1, 4, 3, 5]),
-        ([1, 2, 3, 4, 5], 3, [1, 2, 3, 4, 5]),
+        ([1, 2, 3, 4, 5], 3, [3, 2, 1, 4, 5]),
     ]
+    solution = Solution()
     for case in cases:
-        head = construct_linked_list(case[0])
-        res_head = solution.reverseKGroup(head, case[1])
-        res = get_nums(res_head)
+        linked_lst = solution.construct_linked_list(case[0])
+        # print(solution.get_linked_list(linked_lst))
+        res = solution.get_linked_list(solution.reverseKGroup(linked_lst, case[1]))
         print(res, case[-1])

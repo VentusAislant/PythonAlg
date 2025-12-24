@@ -1,8 +1,6 @@
 from collections import deque
-from typing import List, Optional
 
 
-# Definition for a binary tree node.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
@@ -11,28 +9,41 @@ class TreeNode:
 
 
 class Solution:
-    def buildTree(self, inorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
+    def buildTree(self, inorder: list[int], postorder: list[int], ) -> TreeNode | None:
+        """
+        后序与中序序列构造二叉树，核心在于找到 postorder 和 inorder 的递归结构
+        当前 root 在 postorder 的位置为 -1, 在 inorder 的位置为 i
+        则左子树可以通过 inorder[:i] 和 postorder[:i] 来构建
+        则右子树可以通过 inorder[i+1:] 和 postorder[i:-1] 来构建
+        """
         if not postorder or not inorder:
             return None
 
-        root = TreeNode(postorder[-1])
+        node = TreeNode(postorder[-1])
         idx = inorder.index(postorder[-1])
-        root.right = self.buildTree(inorder[idx + 1:], postorder[idx:-1])
-        root.left = self.buildTree(inorder[:idx], postorder[:idx])
-        return root
+        left_tree = self.buildTree(inorder[:idx], postorder[:idx])
+        right_tree = self.buildTree(inorder[idx + 1:], postorder[idx:-1])
+        node.left = left_tree
+        node.right = right_tree
+        return node
 
 
-def level_order(root: TreeNode) -> List[Optional[int]]:
+def level_order(root: TreeNode) -> list[int | None]:
     queue = deque()
     queue.append(root)
     res = []
     while queue:
         node = queue.popleft()
-        res.append(node.val)
-        if node.left:
+        if node:
+            res.append(node.val)
             queue.append(node.left)
-        if node.right:
             queue.append(node.right)
+        else:
+            res.append(None)
+
+    # 去掉末尾多余的 None
+    while res and res[-1] is None:
+        res.pop()
     return res
 
 

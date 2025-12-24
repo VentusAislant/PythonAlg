@@ -1,26 +1,22 @@
-from typing import List
-
-
 class Solution:
-    def summaryRanges(self, nums: List[int]) -> List[str]:
-        i = 0
-        if not nums: return []
-        cur_start = nums[i]
+    def summaryRanges(self, nums: list[int]) -> list[str]:
+        """
+        使用 left 指针记录当前子区间左边界， right 指针记录当前子区间右边界
+            当区间连续不断右移动 right
+            遇到不连续的地方，先将 [left, right] 放到结果列表，然后
+                left = right
+        """
+        left, right = 0, 0
         res = []
-        while i < len(nums):
-            if i < len(nums) - 1:
-                if nums[i + 1] - nums[i] != 1:
-                    if cur_start == nums[i]:
-                        res.append(str(nums[i]))
-                    else:
-                        res.append(f"{cur_start}->{nums[i]}")
-                    cur_start = nums[i + 1]
+        while right < len(nums):
+            if right + 1 < len(nums) and nums[right] + 1 == nums[right + 1]:
+                # 目前还是连续
+                right += 1
             else:
-                if cur_start == nums[i]:
-                    res.append(str(nums[i]))
-                else:
-                    res.append(f"{cur_start}->{nums[i]}")
-            i += 1
+                to_append = str(nums[left]) if nums[left] == nums[right] else f"{nums[left]}->{nums[right]}"
+                res.append(to_append)
+                left = right + 1
+                right = left
         return res
 
 

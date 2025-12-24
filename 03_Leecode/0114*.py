@@ -1,5 +1,4 @@
 from collections import deque
-from typing import Optional
 
 
 class TreeNode:
@@ -10,24 +9,60 @@ class TreeNode:
 
 
 class Solution:
-    def flatten(self, root: Optional[TreeNode]) -> None:
+
+    def flatten(self, root: TreeNode | None) -> None:
         """
-        Do not return anything, modify root in-place instead.
+        可以使用一个 pre 变量保存上一个访问的结点，然后利用 pre 在前序遍历的过程中进行展开
+        但是这种不适用于递归的前序遍历实现, 递归实现过程中会修改结点 right 指针，导致递归结构出错
+        使用迭代的方法
         """
         if not root:
             return
-        preorder_lst = []
-        self.preorder(root, preorder_lst)
-        for i in range(0, len(preorder_lst) - 1):
-            preorder_lst[i].right = preorder_lst[i + 1]
-            preorder_lst[i].left = None
 
-    def preorder(self, node, store_lst):
-        if not node:
-            return None
-        store_lst.append(node)
-        self.preorder(node.left, store_lst)
-        self.preorder(node.right, store_lst)
+        stack = [root]
+        pre = None
+
+        while stack:
+            cur = stack.pop()
+
+            if pre:
+                pre.left = None
+                pre.right = cur
+
+            # 因为栈后进先出，所以需要先压入右，再压入左
+            if cur.right:
+                stack.append(cur.right)
+            if cur.left:
+                stack.append(cur.left)
+
+            # 左右结点可以先压入栈，结构不会改变
+            pre = cur
+        return None
+
+    def flattenV1(self, root: TreeNode | None) -> None:
+        """
+        前序遍历二叉树，然后用一个列表记录前序序列，之后利用列表进行展开
+        """
+        if not root:
+            return
+
+        node_lst = []
+
+        def preorder(node, lst):
+            if not node:
+                return None
+
+            lst.append(node)
+            preorder(node.left, lst)
+            preorder(node.right, lst)
+
+        preorder(root, node_lst)
+
+        for i in range(len(node_lst) - 1):
+            node_lst[i].right = node_lst[i + 1]
+            node_lst[i].left = None
+
+        return None
 
 
 def construct_tree(level_order):

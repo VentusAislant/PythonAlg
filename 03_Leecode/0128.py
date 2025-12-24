@@ -1,24 +1,38 @@
-from typing import List
-
-
 class Solution:
-    def longestConsecutive(self, nums: List[int]) -> int:
+    def longestConsecutive(self, nums: list[int]) -> int:
+        """
+        首先用一个哈希表 set 存储所有的元素
+            枚举 nums 中的每一个数 x
+            首先判断 x+1 是否在 set 中，如果在，可以继续判断 x+2 ...，同时记录右侧连续长度
+            其次判断 x-1 是否在 set 中，如果在，可以继续判断 x-2 ...，同时记录左侧连续长度
+            记录当前最长连续长度，开始下一个数
+        时间复杂度 O(N)
+        空间复杂度 O(N)
+        """
         nums = set(nums)
         seen = set()
         max_len = 0
-        for num in nums:
-            if num in seen:
+        for x in nums:
+            if x in seen:
                 continue
-            cur_num = num
-            cur_len = 1
-            seen.add(cur_num)
-            while cur_num + 1 in nums:
-                seen.add(cur_num+1)
-                cur_num += 1
-                cur_len += 1
-            max_len = max(max_len, cur_len)
-        return max_len
 
+            right = x + 1
+            right_len = 0
+            while right in nums:
+                right_len += 1
+                seen.add(right)
+                right = right + 1
+
+            left = x - 1
+            left_len = 0
+            while left in nums:
+                left_len += 1
+                seen.add(left)
+                left = left - 1
+
+            max_len = max(max_len, right_len + left_len + 1)
+
+        return max_len
 
 
 if __name__ == '__main__':

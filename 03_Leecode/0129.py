@@ -1,5 +1,4 @@
 from collections import deque
-from typing import Optional
 
 
 class TreeNode:
@@ -10,34 +9,26 @@ class TreeNode:
 
 
 class Solution:
-    def sumNumbers(self, root: Optional[TreeNode]) -> int:
-        if not root:
-            return 0
-        nums = []
-        # 层序遍历思想
-        self.preorder(root, cur_path=[], res=nums)
-        return sum(nums)
+    def sumNumbers(self, root: TreeNode | None) -> int:
+        """
+        遍历过程中不断计算当前路径和以及总和即可, 只有到叶子结点才需要将 cur_sum 添加到 total_sum 中
+        """
 
-    def compute_sum(self, path_vals):
-        base = 1
-        res = 0
-        for num in path_vals[::-1]:
-            res += num * base
-            base *= 10
-        return res
+        def preorder(node, cur_sum=0):
+            cur_sum = cur_sum * 10 + node.val
+            if node.left is None and node.right is None:
+                return cur_sum  # 叶子结点直接返回当前路径和即可
 
-    def preorder(self, node, cur_path, res):
-        cur_path.append(node.val)
-        if node.left is None and node.right is None:
-            res.append(self.compute_sum(cur_path))
+            left_sum, right_sum = 0, 0
+            if node.left:
+                left_sum = preorder(node.left, cur_sum)
 
-        if node.left:
-            self.preorder(node.left, cur_path=cur_path, res=res)
-            cur_path.pop()
+            if node.right:
+                right_sum = preorder(node.right, cur_sum)
 
-        if node.right:
-            self.preorder(node.right, cur_path=cur_path, res=res)
-            cur_path.pop()
+            return left_sum + right_sum
+
+        return preorder(root)
 
 
 def construct_tree(level_order):
@@ -47,29 +38,41 @@ def construct_tree(level_order):
     i = 1
     while queue and i < len(level_order):
         node = queue.popleft()
-        if i < len(level_order) and level_order[i] is not None:
+
+        if level_order[i] is not None:
             node.left = TreeNode(level_order[i])
-            i += 1
             queue.append(node.left)
+        i += 1
 
         if i < len(level_order) and level_order[i] is not None:
             node.right = TreeNode(level_order[i])
-            i += 1
             queue.append(node.right)
+
+        i += 1
     return root
 
 
 def level_order(root):
-    queue = deque()
-    queue.append(root)
+    if not root:
+        return []
+
     res = []
+    queue = deque([root])
+
     while queue:
         node = queue.popleft()
+        if node is None:
+            res.append(None)
+            continue
+
         res.append(node.val)
-        if node.left:
-            queue.append(node.left)
-        if node.right:
-            queue.append(node.right)
+        queue.append(node.left)
+        queue.append(node.right)
+
+    # 去掉末尾多余的 None
+    while res and res[-1] is None:
+        res.pop()
+
     return res
 
 

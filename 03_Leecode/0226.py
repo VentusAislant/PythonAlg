@@ -1,6 +1,4 @@
-# Definition for a binary tree node.
 from collections import deque
-from typing import Optional
 
 
 class TreeNode:
@@ -11,22 +9,26 @@ class TreeNode:
 
 
 class Solution:
-    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        return self._invert(root)
-
-    def _invert(self, node):
-        if node is None:
+    def invertTree(self, root: TreeNode | None) -> TreeNode | None:
+        """
+        遍历一遍，将每个结点的左右结点翻转即可
+        """
+        if not root:
             return None
-        self._invert(node.left)
-        self._invert(node.right)
 
-        tmp = node.left
-        node.left = node.right
-        node.right = tmp
-        return node
+        # 先翻转子树还是当前结点都一样
+        root.left, root.right = root.right, root.left
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+        return root
 
 
 def construct_tree(level_order) -> TreeNode:
+    """
+    层序遍历序列构建二叉树：
+        使用队列辅助，首先根结点入队
+        每次取出一个结点，构建其左右子结点，构建完毕后左右子结点入队
+    """
     queue = deque()
     root = TreeNode(level_order[0])
     queue.append(root)
@@ -45,6 +47,10 @@ def construct_tree(level_order) -> TreeNode:
 
 
 def level_order(root: TreeNode):
+    """
+    获取层序遍历序列
+        使用辅助队列，每遍历一个结点，将其放入队列即可
+    """
     queue = deque()
     queue.append(root)
     result = []

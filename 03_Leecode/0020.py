@@ -1,16 +1,20 @@
 class Solution:
     def isValid(self, s: str) -> bool:
+        """
+        括号匹配，遇左括号入栈，遇右括号根据匹配情况尝试出栈
+        """
         stack = []
-        pair = {')': '(', ']': '[', '}':'{'}
-        for c in s:
-            if c == '(' or c == '[' or c == '{':
-                stack.append(c)
-            else:
-
-                if stack and pair[c] == stack[-1]:
-                    stack.pop()
-                else:
+        map = {')': "(", "]": "[", "}": "{"}
+        for char in s:
+            if stack and char in map:
+                # 右括号，尝试出栈
+                if stack[-1] != map[char]:
+                    # 不匹配
                     return False
+                else:
+                    stack.pop()
+            else:
+                stack.append(char)
         return len(stack) == 0
 
 

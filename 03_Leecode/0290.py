@@ -1,5 +1,8 @@
 class Solution:
     def wordPattern(self, pattern: str, s: str) -> bool:
+        """
+        双射关系，使用两个哈希表记录 字母和单词的映射
+        """
         pattern2s = {}
         s2pattern = {}
         s_list = s.split()

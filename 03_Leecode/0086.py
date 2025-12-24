@@ -1,7 +1,3 @@
-from typing import *
-
-
-# Definition for singly-linked list.
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
@@ -9,53 +5,35 @@ class ListNode:
 
 
 class Solution:
-    def partition(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
-        # 维护两个列表 small 和 large
-        small, large = None, None
-        cur_small, cur_large = None, None
+    def partition(self, head: ListNode | None, x: int) -> ListNode | None:
+        """
+        思路：
+            使用两个头结点 dummy_smaller, dummy_greater， 后面分别接入小于或大于 x 的结点
+            最后将 dummy_smaller_end.next = dummy_greater.next
+        """
+        dummy_smaller = ListNode(0)
+        dummy_greater = ListNode(0)
+
         cur = head
+        cur_smaller = dummy_smaller
+        cur_greater = dummy_greater
         while cur:
-            print(cur.val, cur.next)
-            next_node = cur.next
             if cur.val < x:
-                if small is None:
-                    small = cur
-                    cur_small = cur
-                else:
-                    cur_small.next = cur
-                    cur_small = cur_small.next
+
+                cur_smaller.next = cur
+                cur_smaller = cur_smaller.next
             else:
-                if large is None:
-                    large = cur
-                    cur_large = large
-                else:
-                    cur_large.next = cur
-                    cur_large = cur_large.next
-            # 需要端开下一个节点的连接
-            cur.next=None
-            cur = next_node
+                cur_greater.next = cur
+                cur_greater = cur_greater.next
+            cur = cur.next
 
-        if cur_small is None:
-            return large
-
-        cur_small.next = large
-        return small
-
-    def partition2(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
-        # 转化成列表处理
-        array = get_array_from_linked_list(head)
-        less_x = []
-        larger_x = []
-        for num in array:
-            if num < x:
-                less_x.append(num)
-            else:
-                larger_x.append(num)
-        new_array = less_x + larger_x
-        return construct_linked_list(new_array)
+        # 断开 greater 链表，否则会形成环
+        cur_greater.next = None
+        cur_smaller.next = dummy_greater.next
+        return dummy_smaller.next
 
 
-def construct_linked_list(array) -> Optional[ListNode]:
+def construct_linked_list(array) -> ListNode | None:
     if not array: return None
     head = ListNode(array[0])
     cur = head
@@ -65,7 +43,7 @@ def construct_linked_list(array) -> Optional[ListNode]:
     return head
 
 
-def get_array_from_linked_list(head: ListNode) -> List[int]:
+def get_array_from_linked_list(head: ListNode) -> list[int]:
     res = []
     cur = head
     while cur:

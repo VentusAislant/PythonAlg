@@ -1,19 +1,22 @@
-from typing import List
-
-
 class Solution:
-    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+    def merge(self, intervals: list[list[int]]) -> list[list[int]]:
+        """
+        首先按照左边界进行升序排序，排序后判断重叠规则较为容易
+            如果前者的右边界大于等于后者的左边界，说明存在重叠，需要将两者合并
+            利用一个栈来存储最终的合并完毕的区间
+        """
         if not intervals: return []
         intervals.sort(key=lambda x: x[0])
-        res = [intervals[0]]
-        for cur in intervals[1:]:
-            last = res[-1]
-            # 如何和前面的区间有重叠，则合并
-            if cur[0] <= last[1]:
-                last[1] = max(last[1], cur[1])
+        stack = [intervals[0]]
+        for i in range(1, len(intervals)):
+            if stack[-1][1] >= intervals[i][0]:
+                pop_element = stack.pop()
+                left = min(intervals[i][0], pop_element[0])
+                right = max(intervals[i][1], pop_element[1])
+                stack.append([left, right])
             else:
-                res.append(cur)
-        return res
+                stack.append(intervals[i])
+        return stack
 
 if __name__ == '__main__':
     cases = [

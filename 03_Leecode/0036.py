@@ -1,8 +1,11 @@
-from typing import List
-
-
 class Solution:
-    def isValidSudoku(self, board: List[List[str]]) -> bool:
+    def isValidSudoku(self, board: list[list[str]]) -> bool:
+        """
+        三种情况，行 / 列 / 九宫格都不能出现重复元素
+            利用三个辅助的列表，记录每行，每列，每个九宫格出现的元素
+            一旦某行，某列，某个九宫格出现重复，则返回 False
+            否则返回 True
+        """
         row_sets = [set() for _ in range(9)]
         col_sets = [set() for _ in range(9)]
         box_sets = [set() for _ in range(9)]

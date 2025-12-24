@@ -1,7 +1,3 @@
-from typing import List, Optional
-
-
-# Definition for singly-linked list.
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
@@ -9,48 +5,29 @@ class ListNode:
 
 
 class Solution:
-    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+    def mergeTwoLists(self, list1: ListNode | None, list2: ListNode | None) -> ListNode | None:
+        """
+        标准的归并实现
+        """
         p, q = list1, list2
-        head = None
-        cur_node = head
+        dummy = ListNode(0)  # 一个空的头结点
+        cur = dummy
         while p and q:
-            print(p.val, q.val)
             if p.val < q.val:
-                cur_val = p.val
+                cur.next = p
                 p = p.next
             else:
-                cur_val = q.val
+                cur.next = q
                 q = q.next
 
-            if head is None:
-                head = ListNode(cur_val)
-                cur_node = head
-            else:
-                cur_node.next = ListNode(cur_val)
-                cur_node = cur_node.next
+            cur = cur.next
 
-        while p:
-            if head is None:
-                head = ListNode(p.val)
-                cur_node = head
-            else:
-                cur_node.next = ListNode(p.val)
-                cur_node = cur_node.next
-            p = p.next
-
-        while q:
-            if head is None:
-                head = ListNode(q.val)
-                cur_node = head
-            else:
-                cur_node.next = ListNode(q.val)
-                cur_node = cur_node.next
-            q = q.next
-
-        return head
+        # 剩余的部分直接挂到链表尾部
+        cur.next = p if p else q
+        return dummy.next
 
 
-def construct_linked_list(lst: List[int]) -> Optional[ListNode]:
+def construct_linked_list(lst: list[int]) -> ListNode | None:
     if len(lst) == 0: return None
     head = ListNode(lst[0])
     cur_node = head
@@ -79,6 +56,6 @@ if __name__ == '__main__':
     for case in cases:
         list1 = construct_linked_list(case[0])
         list2 = construct_linked_list(case[1])
-        print(get_linked_list(list1), get_linked_list(list2))
+        # print(get_linked_list(list1), get_linked_list(list2))
         res = get_linked_list(solution.mergeTwoLists(list1, list2))
         print(res, case[-1])
