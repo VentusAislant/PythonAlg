@@ -15,7 +15,17 @@ class Solution:
         self.reverse(nums, k, len(nums) - 1)
         return None
 
-    def rotate_simple(self, nums: list[int], k: int) -> None:
+    def rotateV2(self, nums: list[int], k: int) -> None:
+        """
+        轮转 k 个位置等于，先逆置数组，再逆置前k个数，再逆置后n-k个
+        """
+        k = k % len(nums)
+        nums.reverse()
+        nums[:k] = reversed(nums[:k])
+        nums[k:] = reversed(nums[k:])
+        return None
+
+    def rotateV1(self, nums: list[int], k: int) -> None:
         """
         使用额外数组存储后面 k 个元素来辅助轮转
         """
@@ -36,5 +46,5 @@ if __name__ == '__main__':
         (([-1, -100, 3, 99], 2), [3, 99, -1, -100])
     ]
     for case in cases:
-        solution.rotate_simple(*case[0])
+        solution.rotate(*case[0])
         print(case[0][0], case[1])

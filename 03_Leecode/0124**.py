@@ -22,13 +22,13 @@ class Solution:
         """
         self.max_sum = float('-inf')
 
-        def preorder(node):
+        def postorder(node):
             if node is None:
                 return 0  # 空结点不提供最大路径和的贡献
 
-            # 左右子数的贡献，如果是负数就不要
-            left_gain = max(preorder(node.left), 0)
-            right_gain = max(preorder(node.right), 0)
+            # 左右子树的贡献，如果是负数就不要
+            left_gain = max(postorder(node.left), 0)
+            right_gain = max(postorder(node.right), 0)
 
             # 当前结点作为最高点时的路径和 (可同时使用左右贡献)
             cur_sum = node.val + left_gain + right_gain
@@ -40,7 +40,7 @@ class Solution:
             # 返回当前结点提供的最大路径和贡献
             return node.val + max(left_gain, right_gain)  # 只能使用一边
 
-        preorder(root)
+        postorder(root)
         return self.max_sum
 
 

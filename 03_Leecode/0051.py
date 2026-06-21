@@ -20,7 +20,6 @@ class Solution:
         cols = []  # 每一行一个皇后，记录每行的皇后列位置即可
 
         def backtrack():
-            print(cols)
             if len(cols) == n:
                 # n 个皇后都已就位
                 # board = [["."] * n] * n  # !!!这个写法是错误的，因为 * 会使得所有的这一行引用同一个列表对象

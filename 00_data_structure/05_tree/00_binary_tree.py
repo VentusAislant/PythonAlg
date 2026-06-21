@@ -44,6 +44,22 @@ class BinaryTree:
             i += 1
         return self
 
+    def pre_order(self):
+        """
+        使用栈版本
+        """
+        res = []
+        stack = [self.root]
+        while stack:
+            node = stack.pop()
+            res.append(node.data)
+            # 栈是后进先出，所以需要先压入右
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+        return res
+
     def pre_order_traverse(self):
         results = []
         self._pre_order(self.root, results)
@@ -55,6 +71,21 @@ class BinaryTree:
             self._pre_order(node.left, results)
             self._pre_order(node.right, results)
 
+    def in_order(self):
+        res = []
+        stack = []
+        cur = self.root
+        while stack or cur:
+            # 一直往左走
+            while cur:
+                stack.append(cur)
+                cur = cur.left
+            # 左子树为空，此时栈顶元素为需要访问的
+            cur = stack.pop()
+            res.append(cur.data)
+            cur = cur.right
+        return res
+
     def in_order_traverse(self):
         results = []
         self._in_order(self.root, results)
@@ -65,6 +96,22 @@ class BinaryTree:
             self._in_order(node.left, results)
             results.append(node.data)
             self._in_order(node.right, results)
+
+    def post_order(self):
+        """
+        迭代版本
+        """
+        res = []
+        stack = [self.root]
+        while stack:
+            node = stack.pop()
+            res.append(node.data)
+            if node.left:
+                stack.append(node.left)
+            if node.right:
+                stack.append(node.right)
+        # 根 - 右 - 左 翻转后就是 左右根
+        return res[::-1]
 
     def post_order_traverse(self):
         results = []
@@ -171,8 +218,11 @@ if __name__ == '__main__':
     )
 
     bt.pretty_print()
+    print(bt.pre_order())
     print(bt.pre_order_traverse())
+    print(bt.in_order())
     print(bt.in_order_traverse())
+    print(bt.post_order())
     print(bt.post_order_traverse())
     print(bt.level_order_traverse())
     print(bt.find(1010), bt.find(0))

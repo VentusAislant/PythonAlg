@@ -28,7 +28,6 @@ class Solution:
             合并左右结果
                 left_ancestor， right_ancestor 都非 None,说明 p,q分别在左右子树，返回 root
                 left_ancestor， right_ancestor 其中一个为 None,说明 p,q 在左子树或右子树，返回 不为空的左右子树
-
         """
         if root is None:
             return None

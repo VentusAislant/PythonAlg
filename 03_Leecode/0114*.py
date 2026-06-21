@@ -9,7 +9,6 @@ class TreeNode:
 
 
 class Solution:
-
     def flatten(self, root: TreeNode | None) -> None:
         """
         可以使用一个 pre 变量保存上一个访问的结点，然后利用 pre 在前序遍历的过程中进行展开

@@ -3,19 +3,17 @@ class Solution:
         """
         最简单的思路就是枚举所有的两数和，然后判断哪一组数满足条件，时间复杂度 O(N^2)
         上述方法可以简化为两步，第一步枚举每一个数 x, 第二步，寻找数组中是否存在 target - x
-
         关键可以优化的地方是寻找数组中是否存在 target - x
-        我们可以先用一个哈希表来存储所有的元素，然后枚举每一个数x,直接从哈希表中查看是否存在 targe-x 即可，
-        而且得保证这个 target-x 的索引不是自己（否则就不是两个数了）
+
+        用哈希表存储数到id的映射，遍历过程直接找是否存在 target-num 即可
 
         时间复杂度 O(N)
         空间复杂度 O(N)
         """
-        num2idx = {num: i for i, num in enumerate(nums)}
+        num2idx = {num: idx for idx, num in enumerate(nums)}
         for i, num in enumerate(nums):
-            complete = target - num
-            if complete in num2idx and num2idx[complete] != i:
-                return [i, num2idx[complete]]
+            if target - num in num2idx and i != num2idx[target - num]:
+                return [i, num2idx[target - num]]
         return []
 
     def twoSumV1(self, nums: list[int], target: int) -> list[int]:

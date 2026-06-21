@@ -5,7 +5,46 @@ class ListNode:
 
 
 class Solution:
+    def right_move_k(self, node: ListNode, k: int) -> ListNode | None:
+        cur = node
+        for _ in range(k):
+            if cur:
+                cur = cur.next
+            else:
+                return None
+        return cur
+
     def reverseKGroup(self, head: ListNode | None, k: int) -> ListNode | None:
+        """
+        使用两个指针记录每一段的开头的前一个结点和结尾结点，
+        对每一段使用头插法进行翻转
+        """
+        if k == 1 or not head:
+            return head
+
+        dummy = ListNode(0)
+        dummy.next = head
+
+        cur = dummy
+        while self.right_move_k(cur, k) is not None:
+            next_node = cur.next
+
+            # 翻转这一段
+            # cur 表示头插法的虚拟头结点
+            to_append = cur.next
+            cur.next = None
+            for _ in range(k):
+                next_to_append = to_append.next
+                to_append.next = cur.next
+                cur.next = to_append
+                to_append = next_to_append
+
+            next_node.next = to_append
+            cur = next_node
+
+        return dummy.next
+
+    def reverseKGroupV1(self, head: ListNode | None, k: int) -> ListNode | None:
         if k == 1:
             return head
 

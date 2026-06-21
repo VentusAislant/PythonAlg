@@ -1,38 +1,88 @@
 class Solution:
     def longestConsecutive(self, nums: list[int]) -> int:
         """
-        首先用一个哈希表 set 存储所有的元素
-            枚举 nums 中的每一个数 x
-            首先判断 x+1 是否在 set 中，如果在，可以继续判断 x+2 ...，同时记录右侧连续长度
-            其次判断 x-1 是否在 set 中，如果在，可以继续判断 x-2 ...，同时记录左侧连续长度
-            记录当前最长连续长度，开始下一个数
+        可以发现，我们可以通过在哈希表判断 x-1 是否存在，来确定当前点是否是一个连续序列的起点
+        因此可以避免左右扩展，还可以避免用 seen 来记录访问过的元素
+        每次只从起点开始访问，访问每个可能的序列，例如
+        [100, 1, 2, 101, 3, 4]
+        只需要从 100 开始 和 1开始即可
+
+        时间复杂度 O(N)
+        空间复杂度 O(N)
+        """
+        nums = set(nums)
+        res = 0
+        for num in nums:
+            if num - 1 not in nums:
+                # 是起点
+                cur = num
+                cur_len = 1
+                while cur + 1 in nums:
+                    cur += 1
+                    cur_len += 1
+                if cur_len > res:
+                    res = cur_len
+        return res
+
+    def longestConsecutiveV2(self, nums: list[int]) -> int:
+        """
+        将 nums 转化为哈希表，然后一次判断，如果遇到过则可记录长度并向后判断
+        如何优化 V1 版本，可以看出 V1版本会有很多重复计算，例如
+        [1, 2, 3, 4]， 针对每个元素都要遍历一边来获得每个元素的最大连续长度，其实他们都属于同一个
+        所以可以用一个 seen 哈希表记录访问过的元素，避免重复
+
         时间复杂度 O(N)
         空间复杂度 O(N)
         """
         nums = set(nums)
         seen = set()
-        max_len = 0
-        for x in nums:
-            if x in seen:
+        res = 0
+        for num in nums:
+            if num in seen:
                 continue
+            seen.add(num)
+            cur_num = num
+            cur_len = 1
+            while cur_num + 1 in nums:
+                cur_len += 1
+                cur_num += 1
+                seen.add(cur_num)
 
-            right = x + 1
-            right_len = 0
-            while right in nums:
-                right_len += 1
-                seen.add(right)
-                right = right + 1
+            cur_num = num
+            while cur_num - 1 in nums:
+                cur_len += 1
+                cur_num -= 1
+                seen.add(cur_num)
 
-            left = x - 1
-            left_len = 0
-            while left in nums:
-                left_len += 1
-                seen.add(left)
-                left = left - 1
+            if cur_len > res:
+                res = cur_len
+        return res
 
-            max_len = max(max_len, right_len + left_len + 1)
+    def longestConsecutiveV1(self, nums: list[int]) -> int:
+        """
+        将 nums 转化为哈希表，然后一次判断，如果遇到过则可记录长度并向后判断
 
-        return max_len
+
+        时间复杂度 O(N^2)
+        空间复杂度 O(N)
+        """
+        nums = set(nums)
+        res = 0
+        for num in nums:
+            cur_num = num
+            cur_len = 1
+            while cur_num + 1 in nums:
+                cur_len += 1
+                cur_num += 1
+
+            cur_num = num
+            while cur_num - 1 in nums:
+                cur_len += 1
+                cur_num -= 1
+
+            if cur_len > res:
+                res = cur_len
+        return res
 
 
 if __name__ == '__main__':

@@ -31,6 +31,7 @@ class Solution:
         """
         先记录所有需要删除的行和列，然后进行删除
         使用了额外的空间，不满足题目要求
+        空间复杂度 O(M+N)
         """
         to_delete_i = set()
         to_delete_j = set()

@@ -1,7 +1,7 @@
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         """
-        最简单的做法还是遍历所有起点开始的，所有长度的子串，时间复杂度为 O(N)
+        最简单的做法还是遍历所有起点开始的，所有长度的子串
 
         改进：滑动窗口
         用 left 和 right 记录当前窗口，利用一个 set 来保证窗口中没有重复字符， 同时实时记录最长子串长度

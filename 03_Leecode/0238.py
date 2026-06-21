@@ -15,7 +15,7 @@ class Solution:
         right = 1
 
         # range(start, stop, step), 包含 start 不包含 stop (要到 0 停止，所以设为-1)
-        for i in range(n-1, -1, -1):
+        for i in range(n - 1, -1, -1):
             res[i] *= right
             right *= nums[i]
         return res

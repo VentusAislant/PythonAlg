@@ -8,7 +8,7 @@ class Node:
 class Solution:
     def copyRandomList(self, head: Node | None) -> Node | None:
         """
-        改进，如何使用 O(1)的时间复杂度？
+        改进，如何使用 O(1)的空间复杂度？
             关键是需要有原结点和克隆结点的映射关系，才能构建 random 链条
             可以利用原链，将克隆结点插入到原链对应结点的后面，构建完 random 链后，重新拆分链表构建 next 链
         时间复杂度 O(N)

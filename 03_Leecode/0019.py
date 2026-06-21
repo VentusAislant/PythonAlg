@@ -16,8 +16,8 @@ class Solution:
         dummy = ListNode(0)
         dummy.next = head
 
-        p = dummy  # 记录倒数第 N-1 个结点
-        q = dummy  # 用于辅助找到倒数第 N-1 个结点
+        p = dummy  # 记录倒数第 N+1 个结点
+        q = dummy  # 用于辅助找到倒数第 N+1 个结点
         for _ in range(n + 1):
             q = q.next
 
